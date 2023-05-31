@@ -1,19 +1,29 @@
+import threading
+from FlaskServer import FlaskServer
+
+flaskServer = FlaskServer()
+
+
 def greet_user():
     print("Hello! Welcome to the program.")
+
 
 def display_menu():
     print("Please choose one of the following options:")
     print("1. Option 1")
-    print("2. Option 2")
+    print("2. Start Server")
     print("3. Option 3")
     print("4. Option 4")
     print("5. Option 5")
+
 
 def handle_option(option):
     if option == 1:
         print("You selected Option 1.")
     elif option == 2:
-        print("You selected Option 2.")
+        flask_thread = threading.Thread(target=flaskServer.start)
+        flask_thread.start()
+        print("Flask server started on a separate thread.")
     elif option == 3:
         print("You selected Option 3.")
     elif option == 4:
@@ -23,17 +33,18 @@ def handle_option(option):
     else:
         print("Invalid option. Please choose a valid option.")
 
+
 def main():
     greet_user()
     display_menu()
-    
+
     while True:
         try:
             option = int(input("Enter your choice (1-5): "))
             handle_option(option)
-            break
         except ValueError:
             print("Invalid input. Please enter a number.")
-    
+
+
 if __name__ == "__main__":
     main()
