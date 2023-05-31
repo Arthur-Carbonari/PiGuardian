@@ -1,7 +1,9 @@
 import threading
+from Camera import Camera
 from FlaskServer import FlaskServer
 
-flaskServer = FlaskServer()
+camera = Camera()
+flaskServer = FlaskServer(camera)
 
 
 def greet_user():
