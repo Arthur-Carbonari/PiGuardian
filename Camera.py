@@ -12,10 +12,13 @@ class Camera:
         picam2 = Picamera2()
 
         cam_config = picam2.create_video_configuration( main={"size": (640, 480)}, transform=Transform(hflip=1, vflip=1) )
-
         picam2.configure(cam_config)
+
+        encoder = JpegEncoder()        
         self.output = StreamingOutput()
-        picam2.start_recording(JpegEncoder(), FileOutput(self.output))
+        encoder.output = FileOutput(self.output)
+
+        picam2.start_recording(encoder)
 
 
 class StreamingOutput(io.BufferedIOBase):
