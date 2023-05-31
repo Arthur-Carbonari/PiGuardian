@@ -12,7 +12,7 @@ def greet_user():
 
 def display_menu():
     print("Please choose one of the following options:")
-    print("1. Option 1")
+    print("1. Take a photo")
     print("2. Start Server")
     print("3. Option 3")
     print("4. Option 4")
@@ -21,7 +21,7 @@ def display_menu():
 
 def handle_option(option):
     if option == 1:
-        print("You selected Option 1.")
+        camera.take_photo()
     elif option == 2:
         flask_thread = threading.Thread(target=flaskServer.start)
         flask_thread.start()

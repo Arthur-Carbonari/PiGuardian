@@ -23,6 +23,8 @@ class Camera:
         picam2.start_encoder(encoder)
         picam2.start()
 
+        self.picam2 = picam2
+
     def generate_stream(self):
         while True:
             with self.streaming_output.condition:
@@ -30,6 +32,9 @@ class Camera:
                 frame = self.streaming_output.frame
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            
+    def take_photo(self):
+        self.picam2.capture_file('test.jpg')
 
 
 class StreamingOutput(io.BufferedIOBase):
