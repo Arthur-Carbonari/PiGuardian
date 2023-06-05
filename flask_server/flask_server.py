@@ -1,6 +1,6 @@
 from flask import Flask, Response, request, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap5
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
 import flask_login
 
 from forms import LoginForm
@@ -30,6 +30,10 @@ class FlaskServer:
         # Define routes
         @app.route('/auth', methods=['GET', 'POST'])
         def auth():
+
+            if current_user.is_authenticated:
+                return redirect(url_for('index'))
+
             login_form: LoginForm = LoginForm()
 
             if login_form.validate_on_submit():
@@ -38,7 +42,7 @@ class FlaskServer:
                 user = User()
                 user.id = username
                 login_user(user)
-                redirect('index.html')
+                return redirect(url_for('index'))
 
             return render_template('auth.html', login_form=login_form)
 

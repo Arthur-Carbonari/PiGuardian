@@ -53,14 +53,14 @@
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ url_for('index') }}">Sign out</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
                 </ul>
             </div>
         </div>
 
         <!-- <a class="nav-link" href="{{ url_for('index') }}">Home</a> -->
 
-        <main class="flex-column">
+        <main class="flex-column container p-5">
             <!-- Page Content -->
             <div class="container mt-4">
                 {% block content %}
