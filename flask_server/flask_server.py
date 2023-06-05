@@ -1,9 +1,13 @@
 from flask import Flask, Response, render_template, request
 from flask_bootstrap import Bootstrap
 
+from forms import LoginForm
+
 class FlaskServer:
     def __init__(self, camera):
         app = Flask(__name__)
+        app.config['SECRET_KEY'] = 'your_secret_key'
+
         bootstrap = Bootstrap(app)
 
         @app.route('/')
@@ -14,6 +18,12 @@ class FlaskServer:
         @app.route('/start_camera', methods=['POST'])
         def start_camera():
             return self.handle_start_camera()
+        
+        # Define routes
+        @app.route('/auth', methods=['GET', 'POST'])
+        def auth():
+            login_form = LoginForm()
+            return render_template('auth.html', login_form=login_form)
 
         @app.route('/stop_camera', methods=['POST'])
         def stop_camera():
