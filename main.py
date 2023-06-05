@@ -1,6 +1,6 @@
 import threading
-from Camera import Camera
-from FlaskServer import FlaskServer
+from camera import Camera
+from flask_server.flask_server import FlaskServer
 
 camera = Camera()
 flaskServer = FlaskServer(camera)
