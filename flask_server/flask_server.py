@@ -1,6 +1,6 @@
 from flask import Flask, Response
 from flask_bootstrap import Bootstrap5
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required
 
 from flask_server.models import User
 from flask_server.auth_blueprint import auth_blueprint
@@ -28,6 +28,7 @@ class FlaskServer:
         self.app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
         @self.app.route('/video_feed')
+        @login_required
         def video_feed():
             return Response(camera.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
