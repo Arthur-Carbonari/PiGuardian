@@ -1,10 +1,11 @@
-from flask import Flask, Response, redirect, url_for
+from flask import Flask
 from flask_bootstrap import Bootstrap5
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager
 
 from flask_server.models import User
 from flask_server.auth_blueprint import auth_blueprint
 from flask_server.views_blueprint import views_blueprint
+from flask_server.api_blueprint import api_blueprint
 from pi_guardian.pi_guardian import PiGuardian
 
 
@@ -17,6 +18,7 @@ class FlaskServer:
     def __init__(self, pi_guardian: PiGuardian):
 
         self.pi_guardian = pi_guardian
+        self.app.pi_guardian = pi_guardian
 
         # Setup login manager
         self.login_manager.init_app(self.app)
@@ -33,17 +35,7 @@ class FlaskServer:
         # Register routes
         self.app.register_blueprint(views_blueprint, url_prefix="/")
         self.app.register_blueprint(auth_blueprint, url_prefix="/auth")
-
-        @self.app.route('/video_feed')
-        @login_required
-        def video_feed():
-            return Response(pi_guardian.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
-        
-        @self.app.route('/change_theme')
-        @login_required
-        def change_theme():
-            self.app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'lumen'
-            return redirect(url_for('views_blueprint.home'))
+        self.app.register_blueprint(api_blueprint, url_prefix='/api')
         
 
     @login_manager.user_loader
