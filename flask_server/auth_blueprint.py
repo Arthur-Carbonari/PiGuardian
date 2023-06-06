@@ -10,10 +10,6 @@ auth_blueprint = Blueprint('auth_blueprint', __name__)
 
 @auth_blueprint.route('/', methods=['GET', 'POST'])
 def auth():
-
-    if current_user.is_authenticated:
-        return redirect(url_for('views_blueprint.index'))
-
     login_form: LoginForm = LoginForm()
 
     if login_form.validate_on_submit():
@@ -22,7 +18,10 @@ def auth():
         user = User()
         user.id = username
         login_user(user)
-        return redirect(url_for('views_blueprint.index'))
+        return redirect(url_for('views_blueprint.home'))
+    
+    if current_user.is_authenticated:
+        return redirect(url_for('views_blueprint.home'))
 
     return render_template('auth.html', login_form=login_form)
 

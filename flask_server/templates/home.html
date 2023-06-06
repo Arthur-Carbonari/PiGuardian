@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h1>Welcome to My App</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel fermentum nisl, ac rutrum quam.
+            Pellentesque efficitur arcu sed nisi vulputate, non suscipit urna pulvinar. Integer condimentum,
+            ligula ac auctor dapibus, lacus risus euismod magna, eu posuere ex risus auctor est.</p>
+    </div>
+</div>
+<div class="main" id="newpost">
+
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            <div class="col">
+                <a data-bs-toggle="modal" data-bs-target="#videoModal">
+                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('video_feed') }}">
+                </a>
+            </div>
+
+            <div class="col">
+                <a data-bs-toggle="modal" data-bs-target="#videoModal">
+                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('video_feed') }}">
+                </a>
+            </div>
+
+            <div class="col">
+                <a data-bs-toggle="modal" data-bs-target="#videoModal">
+                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('video_feed') }}">
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body align-self-center w-75">
+                <img class="camera-bg img-fluid w-100" class="center" src="{{ url_for('video_feed') }}">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

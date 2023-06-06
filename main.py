@@ -1,9 +1,10 @@
 import threading
-# from camera import Camera
-from flask_server.flask_server import FlaskServer
 
-# camera = Camera()
-flaskServer = FlaskServer({})
+from flask_server.flask_server import FlaskServer
+from pi_guardian.mock_camera import MockCamera
+
+camera = MockCamera()
+flaskServer = FlaskServer(camera)
 
 
 def greet_user():

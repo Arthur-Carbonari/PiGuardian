@@ -21,7 +21,7 @@
 
         {% block sidebar %}
         <nav class="d-flex flex-column flex-shrink-0 p-4 text-white bg-dark" style="min-width: 15%;">
-            <a href="{{ url_for('views_blueprint.index') }}" class="text-white text-decoration-none">
+            <a href="{{ url_for('views_blueprint.home') }}" class="text-white text-decoration-none">
                 <h3>
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
                     PiGuardian
@@ -31,15 +31,15 @@
             <ul class="nav nav-pills flex-column mb-auto">
                 
                 <li class="nav-item">
-                    <a href="{{ url_for('views_blueprint.index') }}" class="nav-link" aria-current="page"><i class="fa fa-home"></i> Home</a>
+                    <a href="{{ url_for('views_blueprint.home') }}" class="nav-link" aria-current="page"><i class="fa fa-home"></i> Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url_for('views_blueprint.index') }}" class="nav-link" aria-current="page"><i class="fa fa-users"></i> Profiles</a>
+                    <a href="{{ url_for('views_blueprint.home') }}" class="nav-link" aria-current="page"><i class="fa fa-users"></i> Profiles</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url_for('views_blueprint.index') }}" class="nav-link" aria-current="page"><i class="fa fa-cog"></i> Settings</a>
+                    <a href="{{ url_for('views_blueprint.home') }}" class="nav-link" aria-current="page"><i class="fa fa-cog"></i> Settings</a>
                 </li>
                 
             </ul>
@@ -73,6 +73,11 @@
 
     <!-- Bootstrap JS -->
     {{ bootstrap.load_js() }}
+    <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script>
+
+    <script>
+        import 'bs5-lightbox';
+    </script>
 
 </body>
 

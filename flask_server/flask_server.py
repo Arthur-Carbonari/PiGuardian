@@ -27,6 +27,10 @@ class FlaskServer:
         self.app.register_blueprint(views_blueprint, url_prefix="/")
         self.app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
+        @self.app.route('/video_feed')
+        def video_feed():
+            return Response(camera.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
     @login_manager.user_loader
     def user_loader(username):
         user = User()
@@ -44,11 +48,6 @@ class FlaskServer:
         user = User()
         user.id = username
         return user
-
-    @app.route('/video_feed')
-    def video_feed():
-        return "something"
-        return Response(self.camera.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)
