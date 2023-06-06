@@ -3,9 +3,9 @@ from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 
 from flask_server.models import User
-from flask_server.auth_blueprint import auth_blueprint
-from flask_server.views_blueprint import views_blueprint
-from flask_server.api_blueprint import api_blueprint
+from flask_server.blueprints.auth import auth_blueprint
+from flask_server.blueprints.views import views_blueprint
+from flask_server.blueprints.api import api_blueprint
 from pi_guardian.pi_guardian import PiGuardian
 
 
