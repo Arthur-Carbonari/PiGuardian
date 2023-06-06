@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h1>Your Profiles</h1>
+
+        <p>These are your users safely registered with us.</p>
+    </div>
+</div>
+
+<hr>
+
+<div>
+
+    <div class="container">
+
+        <div id="main-content" class="file_manager">
+            <div class="container">
+                <div class="row clearfix">
+
+
+                    {% for i in range(6) %}
+
+                    <div class="col-lg-3 col-md-4 col-sm-12 p-3">
+                        <div class="card">
+                            <div class="file position-relative">
+                                <div class="hover position-absolute m-1 end-0">
+                                    <button type="button" class="btn btn-icon btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="image">
+                                    <img src="https://www.bootdey.com/image/280x280/87CEFA/000000" alt="img" class="img-fluid">
+                                </div>
+                                <div class="file-name p-2 pt-3 text-center">
+                                    <h4 class="m-b-5 text-muted text-capitalize">arthur martins</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

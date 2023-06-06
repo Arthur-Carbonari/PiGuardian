@@ -11,3 +11,7 @@ def require_login():
 @views_blueprint.route('/')
 def home():
     return render_template('home.html')
+
+@views_blueprint.route('/profiles')
+def profiles():
+    return render_template('profiles.html')
