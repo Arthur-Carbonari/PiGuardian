@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, current_app, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from flask_server.forms import LoginForm
@@ -14,7 +14,8 @@ def auth():
 
     if login_form.validate_on_submit():
         username, password = login_form.username.data, login_form.password.data
-        print(username, password)
+        if not current_app.authenticate_user(username, password):
+            return
         user = User()
         user.id = username
         login_user(user)

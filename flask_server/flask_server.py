@@ -17,6 +17,8 @@ class FlaskServer:
 
     def __init__(self, pi_guardian: PiGuardian):
 
+        self.te = 'im here mtf'
+
         self.pi_guardian = pi_guardian
         self.app.pi_guardian = pi_guardian
 
@@ -36,6 +38,9 @@ class FlaskServer:
         self.app.register_blueprint(views_blueprint, url_prefix="/")
         self.app.register_blueprint(auth_blueprint, url_prefix="/auth")
         self.app.register_blueprint(api_blueprint, url_prefix='/api')
+
+        # Register methods
+        self.app.authenticate_user = self.authenticate_user
         
 
     @login_manager.user_loader
@@ -55,6 +60,9 @@ class FlaskServer:
         user = User()
         user.id = username
         return user
+    
+    def authenticate_user(self, username, password):
+        return self.pi_guardian.authenticate_user(username, password)
 
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)
