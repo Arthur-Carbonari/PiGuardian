@@ -3,12 +3,12 @@ import threading
 from flask_server.flask_server import FlaskServer
 from pi_guardian.pi_guardian import PiGuardian
 
-piGuardian = PiGuardian()
-flaskServer = FlaskServer(piGuardian)
+pi_guardian = PiGuardian()
+flask_server = FlaskServer(pi_guardian)
 
 
 def main():
-    flask_thread = threading.Thread(target=flaskServer.start)
+    flask_thread = threading.Thread(target=flask_server.start)
     flask_thread.start()
 
 
