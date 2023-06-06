@@ -1,9 +1,10 @@
-from flask import Flask, Response, request, render_template, redirect, url_for
+from flask import Flask, Response
 from flask_bootstrap import Bootstrap5
-from flask_login import LoginManager, UserMixin, current_user, login_required, login_user, logout_user
-import flask_login
+from flask_login import LoginManager
 
-from flask_server.forms import LoginForm
+from flask_server.models import User
+from flask_server.auth_blueprint import auth_blueprint
+from flask_server.views_blueprint import views_blueprint
 
 
 class FlaskServer:
@@ -16,68 +17,38 @@ class FlaskServer:
 
     def __init__(self, camera):
 
+        self.camera = camera
+
         self.login_manager.init_app(self.app)
-        self.login_manager.login_view = 'auth'
+        self.login_manager.login_view = 'auth_blueprint.auth'
 
         Bootstrap5(self.app)
 
-        self.camera = camera
-
-    @app.route('/')
-    @flask_login.login_required
-    def index():
-        return render_template('index.html')
-
-    # Define routes
-    @app.route('/auth', methods=['GET', 'POST'])
-    def auth():
-
-        if current_user.is_authenticated:
-            return redirect(url_for('index'))
-
-        login_form: LoginForm = LoginForm()
-
-        if login_form.validate_on_submit():
-            username, password = login_form.username.data, login_form.password.data
-            print(username, password)
-            user = User()
-            user.id = username
-            login_user(user)
-            return redirect(url_for('index'))
-
-        return render_template('auth.html', login_form=login_form)
+        self.app.register_blueprint(views_blueprint, url_prefix="/")
+        self.app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
     @login_manager.user_loader
-    def user_loader(email):
+    def user_loader(username):
         user = User()
-        user.id = email
+        user.id = username
         return user
 
     @login_manager.request_loader
     def request_loader(request):
 
-        email = request.form.get('email')
+        username = request.form.get('username')
 
-        if not email:
+        if not username:
             return
 
         user = User()
-        user.id = email
+        user.id = username
         return user
 
-    @app.route('/logout', methods=['GET', 'POST'])
-    @login_required
-    def logout():
-        logout_user()
-        return redirect('auth')
-
     @app.route('/video_feed')
-    def video_feed(self):
+    def video_feed():
+        return "something"
         return Response(self.camera.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)
-
-
-class User(UserMixin):
-    pass
