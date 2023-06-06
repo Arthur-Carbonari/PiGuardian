@@ -15,7 +15,7 @@ class PiGuardian:
         self.config = configparser.ConfigParser()
 
         # Load the .ini file
-        self.config.read('pi_guardian/config.ini')
+        self.config.read('config.ini')
 
     def generate_stream(self):
         while True:
@@ -26,7 +26,7 @@ class PiGuardian:
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def take_picture(self):
-        self.camera.save_frame('test')
+        self.camera.save_frame('dataset/arthur_martins/pic1')
 
     def get_flask_config(self):
         return dict(self.config.items('Flask'))

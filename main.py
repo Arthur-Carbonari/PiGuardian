@@ -8,8 +8,9 @@ flask_server = FlaskServer(pi_guardian)
 
 
 def main():
-    flask_thread = threading.Thread(target=flask_server.start)
-    flask_thread.start()
+    flask_server.start()
+    # flask_thread = threading.Thread(target=flask_server.start)
+    # flask_thread.start()
 
 
 if __name__ == "__main__":

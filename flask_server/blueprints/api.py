@@ -13,3 +13,8 @@ def require_login():
 @api_blueprint.route('/video_feed')
 def video_feed():
     return Response(current_app.pi_guardian.generate_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@api_blueprint.route('/pic')
+def take_picture():
+    current_app.pi_guardian.take_picture()
+    return redirect(url_for('views_blueprint.profiles'))
