@@ -19,7 +19,8 @@
 
     <div class="d-flex" style="min-height: 100vh;">
 
-        <div class="d-flex flex-column flex-shrink-0 p-4 text-white bg-dark" style="min-width: 15%;">
+        {% block sidebar %}
+        <nav class="d-flex flex-column flex-shrink-0 p-4 text-white bg-dark" style="min-width: 15%;">
             <a href="{{ url_for('index') }}" class="text-white text-decoration-none">
                 <h3>
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
@@ -56,7 +57,8 @@
                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
                 </ul>
             </div>
-        </div>
+        </nav>
+        {% endblock %}
 
         <!-- <a class="nav-link" href="{{ url_for('index') }}">Home</a> -->
 
