@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, current_app, redirect, render_template, url_for
 from flask_login import login_required
 
 views_blueprint = Blueprint('views_blueprint', __name__)
@@ -14,4 +14,7 @@ def home():
 
 @views_blueprint.route('/profiles')
 def profiles():
-    return render_template('profiles.html')
+
+    profiles = current_app.get_profiles()
+
+    return render_template('profiles.html', profiles=profiles)

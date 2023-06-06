@@ -2,10 +2,12 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-9">
+    <div>
         <h1>Your Profiles</h1>
 
         <p>These are your users safely registered with us.</p>
+
+        <button class="btn btn-primary new-button float-end"> New Profile <i class="fa fa-plus p-1" aria-hidden="true"></i> </button>
     </div>
 </div>
 
@@ -20,7 +22,7 @@
                 <div class="row clearfix">
 
 
-                    {% for i in range(6) %}
+                    {% for profile in profiles %}
 
                     <div class="col-lg-3 col-md-4 col-sm-12 p-3">
                         <div class="card">
@@ -30,11 +32,11 @@
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
-                                <div class="image">
-                                    <img src="https://www.bootdey.com/image/280x280/87CEFA/000000" alt="img" class="img-fluid">
+                                <div class="overflow-hidden" style="height: 200px;">
+                                    <img src="{{ url_for('api_blueprint.static', filename=profile[1]) }}" class="img-fluid" width="260px" height="195px">
                                 </div>
                                 <div class="file-name p-2 pt-3 text-center">
-                                    <h4 class="m-b-5 text-muted text-capitalize">arthur martins</h4>
+                                    <h4 class="m-b-5 text-muted text-capitalize">{{ profile[0] }}</h4>
                                 </div>
                             </div>
                         </div>

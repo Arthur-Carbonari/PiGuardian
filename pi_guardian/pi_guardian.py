@@ -1,4 +1,5 @@
 import configparser
+import os
 
 import bcrypt
 from pi_guardian.mock_camera import MockCamera
@@ -16,6 +17,8 @@ class PiGuardian:
 
         # Load the .ini file
         self.config.read('config.ini')
+
+        self.get_profiles()
 
     def generate_stream(self):
         while True:
@@ -39,3 +42,21 @@ class PiGuardian:
             return True
         
         return bcrypt.checkpw(entered_password.encode('utf-8'), password.encode('utf-8')) and entered_username == username
+
+    def get_profiles(self):
+        dataset_path = 'dataset'  # Path to the "dataset" folder
+
+        profiles = []
+        
+        for folder_name in os.listdir(dataset_path):
+            folder_path = os.path.join(dataset_path, folder_name)
+            if os.path.isdir(folder_path):
+                files = os.listdir(folder_path)
+                if files:  # Check if the folder contains any files
+                    path_to_file = folder_name + '/' + files[0]
+                    profile_name = folder_name.replace('_', ' ')
+
+                    profiles.append([profile_name, path_to_file])
+
+        return profiles
+            

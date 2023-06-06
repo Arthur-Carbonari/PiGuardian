@@ -40,7 +40,8 @@ class FlaskServer:
         self.app.register_blueprint(api_blueprint, url_prefix='/api')
 
         # Register methods
-        self.app.authenticate_user = self.authenticate_user
+        self.app.authenticate_user = self.pi_guardian.authenticate_user
+        self.app.get_profiles = self.pi_guardian.get_profiles
         
 
     @login_manager.user_loader
@@ -60,9 +61,6 @@ class FlaskServer:
         user = User()
         user.id = username
         return user
-    
-    def authenticate_user(self, username, password):
-        return self.pi_guardian.authenticate_user(username, password)
 
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)
