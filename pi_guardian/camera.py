@@ -1,10 +1,8 @@
-import io
-from threading import Condition
-
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 from libcamera import Transform
+from pi_guardian.streaming_output import StreamingOutput
 
 
 class Camera:
@@ -37,12 +35,3 @@ class Camera:
         self.picam2.capture_file('test.jpg')
 
 
-class StreamingOutput(io.BufferedIOBase):
-    def __init__(self):
-        self.frame = None
-        self.condition = Condition()
-
-    def write(self, buf):
-        with self.condition:
-            self.frame = buf
-            self.condition.notify_all()
