@@ -1,3 +1,4 @@
+import configparser
 from pi_guardian.mock_camera import MockCamera
 
 
@@ -7,6 +8,12 @@ class PiGuardian:
         self.camera = MockCamera()
 
         self.camera.start_capture()
+        
+        # Create a ConfigParser object
+        self.config = configparser.ConfigParser()
+
+        # Load the .ini file
+        self.config.read('pi_guardian/config.ini')
 
     def generate_stream(self):
         while True:
@@ -18,3 +25,6 @@ class PiGuardian:
 
     def take_picture(self):
         self.camera.save_frame('test')
+
+    def get_flask_config(self):
+        return dict(self.config.items('Flask'))
