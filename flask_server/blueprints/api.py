@@ -2,7 +2,7 @@ from flask import Blueprint, Response, current_app, redirect, render_template, u
 from flask_login import login_required
 
 
-api_blueprint = Blueprint('api_blueprint', __name__)
+api_blueprint = Blueprint('api_blueprint', __name__, static_url_path='profiles/photos' ,static_folder='../../dataset/')
 
 @api_blueprint.before_request
 @login_required
