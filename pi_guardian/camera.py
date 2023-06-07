@@ -57,6 +57,8 @@ class Camera:
 
         self.picam2 = picam2
 
+        threading.Thread(target=self.detect_faces).start()
+
     def generate_stream(self):
         while True:
             with self.streaming_output.condition:
@@ -92,6 +94,17 @@ class Camera:
         self.draw_faces(request)
         self.apply_timestamp(request)
 
+
+    def get_face_recognition_frame(self):
+        # grab the buffer from the current stream
+        buffer = self.picam2.capture_buffer('lores')
+        frame = buffer[:self.s1 * self.h1].reshape((self.h1, self.s1))
+        
+        # frame = imutils.resize(frame, width=500)
+        # Detect the fce boxes
+        return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+         
+
     def detect_faces(self):
 
         currentname = "unknown"
@@ -101,13 +114,8 @@ class Camera:
             # Resets names
             self.names = []
 
-            # grab the buffer from the current stream
-            buffer = self.picam2.capture_buffer('lores')
-            frame = buffer[:self.s1 * self.h1].reshape((self.h1, self.s1))
-            
-            # frame = imutils.resize(frame, width=500)
-            # Detect the fce boxes
-            output = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            output = self.get_face_recognition_frame()
+
             self.face_boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
             encodings = face_recognition.face_encodings(output, self.face_boxes)
@@ -140,13 +148,9 @@ class Camera:
 
                             if currentname != name:
                                     currentname = name
-
-                    if name == 'Unknown':
-                        yield
                         
                     # update the list of names
                     self.names.append(name.replace('_', ' '))
-
 
                     print("current faces > ",self.names)
 

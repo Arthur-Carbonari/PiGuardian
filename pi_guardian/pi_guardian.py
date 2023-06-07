@@ -25,8 +25,6 @@ class PiGuardian:
 
         self.get_profiles()
 
-        threading.Thread(target=self.start_face_recognition).start()
-
 
     def generate_stream(self):
         while True:
@@ -55,6 +53,7 @@ class PiGuardian:
         for _ in look_for_stranger:
             self.email_handler.send_email('arthurcarbonari99@gmail.com',
                                           self.camera.get_frame())
+            
 
 
 
