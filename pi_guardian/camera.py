@@ -40,7 +40,7 @@ class Camera:
     colour = (0, 255, 0)
     origin = (0, 30)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    scale = 1
+    scale = 0.5
     thickness = 2
 
     def __init__(self):
@@ -57,6 +57,9 @@ class Camera:
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
         self.face_locations = []
+
+        self.boxes = []
+        self.names = []
 
         self.streaming_output = StreamingOutput()
         picam2.start_recording(JpegEncoder(), FileOutput(self.streaming_output))
@@ -83,9 +86,13 @@ class Camera:
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
     def draw_faces(self, request):
         with MappedArray(request, "main") as m:
-            for f in self.face_locations:
-                (x, y, w, h) = [c * n // d for c, n, d in zip(f, (self.w0, self.h0) * 2, (self.w1, self.h1) * 2)]
-                cv2.rectangle(m.array, (x, y), (x + w, y + h), (0, 255, 0, 0))
+            for ((top, right, bottom, left), name) in zip(self.boxes, self.names):
+                # draw the predicted face name on the image - color is in BGR
+                cv2.rectangle(m.array, (left, top), (right, bottom),
+                    (0, 255, 225), 2)
+                y = top - 15 if top - 15 > 15 else top + 15
+                cv2.putText(m.array, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
+                    .8, (0, 255, 255), 2)
 
     def apply_timestamp(self, request):
         timestamp = time.strftime("%Y-%m-%d %X")
@@ -94,8 +101,8 @@ class Camera:
                         self.scale, self.colour, self.thickness)
             
     def post_callback(self, request):
-        self.apply_timestamp(request)
         self.draw_faces(request)
+        self.apply_timestamp(request)
 
     def detect_faces(self):
 
@@ -107,13 +114,14 @@ class Camera:
             # grab the frame from the threaded video stream and resize it
             # to 500px (to speedup processing)
             frame = self.picam2.capture_array()
-            frame = imutils.resize(frame, width=500)
+            
+            # frame = imutils.resize(frame, width=500)
             # Detect the fce boxes
             output = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            boxes = face_recognition.face_locations(output)
+            self.boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
             encodings = face_recognition.face_encodings(output, boxes)
-            names = []
+            self.names = []
 
             # variables to draw_faces
             # self.picam2.post_callback = draw_faces
@@ -154,9 +162,8 @@ class Camera:
                                     print(currentname)
 
 
-            # update the list of names
-                    names.append(name)
-                    print(name)
+                    # update the list of names
+                    self.names.append(name)
                     print("current faces > ",names)
 
 
