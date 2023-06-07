@@ -50,11 +50,13 @@ class PiGuardian:
 
     def stranger_spotted(self):
 
-        print('i dont know you')
-        email = self.config.get('')
-        image = self.camera.get_frame()
+        email = self.config.get('User', 'email')
 
-        
+        if email:
+            image = self.camera.get_frame()
+            self.email_handler.send_email(email, image)
+
+        # record and save video
 
 
     def authenticate_user(self, entered_username, entered_password):

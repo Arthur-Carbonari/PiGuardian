@@ -114,7 +114,7 @@ class Camera:
             rgb_image = self.get_rgb_image()
             self.boxes, self.names = self.pi_guardian.face_recognition_handler.look_for_faces(rgb_image)
 
-            if 'Unkown' in self.names:
+            if 'Unknown' in self.names:
                 self.pi_guardian.stranger_spotted()
                     
 
