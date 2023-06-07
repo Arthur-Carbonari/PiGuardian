@@ -91,7 +91,7 @@ class Camera:
                 cv2.rectangle(m.array, (left* 2, top * 2), (right* 2, bottom* 2),
                     (0, 255, 225), 2)
                 y = top - 15 if top - 15 > 15 else top + 15
-                cv2.putText(m.array, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
+                cv2.putText(m.array, name, (left * 2, y * 2), cv2.FONT_HERSHEY_SIMPLEX,
                     .5, (0, 255, 255), 2)
 
     def apply_timestamp(self, request):
