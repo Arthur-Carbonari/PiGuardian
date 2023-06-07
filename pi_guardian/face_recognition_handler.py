@@ -21,7 +21,7 @@ class FaceRecognitionHandler:
     def look_for_faces(self, rgb_image):
         boxes = face_recognition.face_locations(rgb_image)
         # compute the facial embeddings for each face bounding box
-        encodings = face_recognition.face_encodings(rgb_image, self.boxes)
+        encodings = face_recognition.face_encodings(rgb_image, boxes)
         names = []
 
         # loop over the facial embeddings
