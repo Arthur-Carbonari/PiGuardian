@@ -111,7 +111,7 @@ class Camera:
         face_recognition_handler = FaceRecognitionHandler()
         while True:
 
-            rgb_image = self.camera.get_rgb_image()
+            rgb_image = self.get_rgb_image()
             self.boxes, self.names = face_recognition_handler.look_for_faces(rgb_image)
                     
 
