@@ -51,12 +51,11 @@ class PiGuardian:
 
     def start_face_recognition(self):
 
-        currentname = "Unknown"
         face_recognition_handler = FaceRecognitionHandler()
 
         while True:
 
-            rgb_image = self.get_rgb_image()
+            rgb_image = self.camera.get_rgb_image()
             boxes, names = face_recognition_handler.look_for_faces(rgb_image)
             self.camera.highlight_faces(boxes, names)
 
