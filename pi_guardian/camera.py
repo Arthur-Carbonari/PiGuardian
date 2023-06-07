@@ -46,7 +46,7 @@ class Camera:
     def __init__(self):
         picam2 = Picamera2()
 
-        cam_config = picam2.create_video_configuration(main={"size": (640, 480)}, 
+        cam_config = picam2.create_video_configuration(main={"size": (320, 240)}, 
                                                        lores={"size": (320, 240), "format": "YUV420"}, 
                                                        transform=Transform(hflip=1,vflip=1))        
         
@@ -113,7 +113,8 @@ class Camera:
         while True:
             # grab the frame from the threaded video stream and resize it
             # to 500px (to speedup processing)
-            frame = self.picam2.capture_array()
+            buffer = self.picam2.capture_buffer('lores')
+            frame = buffer[:s1 * self.h1].reshape((self.h1, s1))
             
             # frame = imutils.resize(frame, width=500)
             # Detect the fce boxes
