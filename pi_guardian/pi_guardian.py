@@ -14,9 +14,9 @@ from pi_guardian.face_recognition_handler import FaceRecognitionHandler
 class PiGuardian:
 
     def __init__(self) -> None:
+        self.face_recognition_handler = FaceRecognitionHandler()
         self.camera = Camera(self)
         self.email_handler = EmailHandler()
-        self.face_recognition_handler = FaceRecognitionHandler()
         
 
         # Create a ConfigParser object
@@ -50,8 +50,8 @@ class PiGuardian:
 
     def stranger_spotted(self):
 
-        # if self.config.get('')
         print('i dont know you')
+        email = self.config.get('')
         image = self.camera.get_frame()
 
         
