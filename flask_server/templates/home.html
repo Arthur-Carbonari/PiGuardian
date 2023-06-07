@@ -3,11 +3,13 @@
 {% block content %}
 <div class="row">
     <div class="col-md-9">
-        <h1>Welcome to My App</h1>
+        <h1>Welcome to PiGuardian!</h1>
+
+        <h3>Your ultimate Raspberry Pi security system.</h3>
         
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel fermentum nisl, ac rutrum quam.
-            Pellentesque efficitur arcu sed nisi vulputate, non suscipit urna pulvinar. Integer condimentum,
-            ligula ac auctor dapibus, lacus risus euismod magna, eu posuere ex risus auctor est.</p>
+        <p>
+            Secure your space with the power of PiGuardian, your trusted companion in safeguarding what matters most. Whether it's your home, office, or any other personal space, PiGuardian combines cutting-edge technology with ease of use to provide you with complete peace of mind.
+        </p>
     </div>
 </div>
 
@@ -17,21 +19,9 @@
 
     <div class="container">
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="row">
 
-            <div class="col">
-                <a data-bs-toggle="modal" data-bs-target="#videoModal">
-                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('api_blueprint.video_feed') }}">
-                </a>
-            </div>
-
-            <div class="col">
-                <a data-bs-toggle="modal" data-bs-target="#videoModal">
-                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('api_blueprint.video_feed') }}">
-                </a>
-            </div>
-
-            <div class="col">
+            <div class="col w-50">
                 <a data-bs-toggle="modal" data-bs-target="#videoModal">
                     <img class="camera-bg img-fluid" class="center" src="{{ url_for('api_blueprint.video_feed') }}">
                 </a>
