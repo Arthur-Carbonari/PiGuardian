@@ -58,6 +58,7 @@ class PiGuardian:
 
         # record and save video
         threading.Thread(target=self.detect_faces).start()
+        self.camera.save_video('/media/pi/Project/test.mjpeg', 60)
 
 
     def authenticate_user(self, entered_username, entered_password):

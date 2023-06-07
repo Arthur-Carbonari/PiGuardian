@@ -59,7 +59,7 @@ class Camera:
 
         self.streaming_output = StreamingOutput()
 
-        encoder = H264Encoder()
+        encoder = JpegEncoder()
 
         temp_output = FileOutput(self.streaming_output)
         self.save_file_output = FileOutput()
@@ -86,7 +86,7 @@ class Camera:
             return
 
         try:
-            print('trying to record')
+            print ('trying to record')
             self.save_file_output.fileoutput = path
             self.save_file_output.start()
             time.sleep(seconds)
