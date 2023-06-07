@@ -47,7 +47,7 @@ class Camera:
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
-        self.s1 = self.picam2.stream_configuration("lores")["stride"]
+        self.s1 = picam2.stream_configuration("lores")["stride"]
 
         self.face_boxes = []
         self.names = []
@@ -149,6 +149,8 @@ class Camera:
                         email_handler = EmailHandler()
                         image = self.streaming_output.frame
                         email_handler.send_email('arthurcarbonari99@gmail.com', image)
+                        print('email sent')
+                        return
 
                     # update the list of names
                     self.names.append(name.replace('_', ' '))
