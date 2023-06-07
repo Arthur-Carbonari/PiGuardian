@@ -120,7 +120,7 @@ class Camera:
             output = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             self.boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
-            encodings = face_recognition.face_encodings(output, boxes)
+            encodings = face_recognition.face_encodings(output, self.boxes)
             self.names = []
 
             # variables to draw_faces
@@ -164,7 +164,7 @@ class Camera:
 
                     # update the list of names
                     self.names.append(name)
-                    print("current faces > ",names)
+                    print("current faces > ",self.names)
 
 
 
