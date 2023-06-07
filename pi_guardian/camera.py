@@ -56,7 +56,17 @@ class Camera:
         self.names = []
 
         self.streaming_output = StreamingOutput()
-        picam2.start_recording(JpegEncoder(), FileOutput(self.streaming_output))
+
+        encoder = JpegEncoder()
+
+        temp_output = FileOutput(self.streaming_output)
+        save_file_output = FileOutput()
+
+        encoder.output = [temp_output, save_file_output]
+
+        temp_output.start()
+        picam2.start_recording(encoder)
+
 
         self.picam2 = picam2
 
