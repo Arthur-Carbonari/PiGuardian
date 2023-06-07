@@ -47,6 +47,7 @@ class FlaskServer:
         self.app.add_profile = self.pi_guardian.add_profile
         
 
+    # setup login manager
     @login_manager.user_loader
     def user_loader(username):
         user = User()
@@ -65,11 +66,13 @@ class FlaskServer:
         user.id = username
         return user
     
+    # sets up utilities funcitons to use inside html
     @app.context_processor
     def utility_processor():
         def get_theme_switch_form():
             return SwitchThemeForm().check(current_app.config['BOOTSTRAP_BOOTSWATCH_THEME'] == 'darkly')
         return dict(get_theme_switch_form=get_theme_switch_form)
 
+    # start the server
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)
