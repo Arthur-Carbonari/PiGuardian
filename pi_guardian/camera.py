@@ -92,7 +92,7 @@ class Camera:
                     (0, 255, 225), 2)
                 y = top - 15 if top - 15 > 15 else top + 15
                 cv2.putText(m.array, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
-                    .8, (0, 255, 255), 2)
+                    .5, (0, 255, 255), 1.5)
 
     def apply_timestamp(self, request):
         timestamp = time.strftime("%Y-%m-%d %X")
