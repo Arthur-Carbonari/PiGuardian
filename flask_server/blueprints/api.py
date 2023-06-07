@@ -21,7 +21,8 @@ def take_picture():
 
 @api_blueprint.route('/change_theme', methods=['POST'])
 def change_theme():
-    dark_mode = request.form.get('switchValue') == 'true'
+    dark_mode = 'True' if request.form.get('switchValue') == 'true' else ''
     current_app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly' if dark_mode else 'lumen'
-    current_app.update_flask_config('dark_mode' , 'True' if dark_mode else '')
+    current_app.update_flask_config('dark_mode' , dark_mode)
     return 'sucess'
+

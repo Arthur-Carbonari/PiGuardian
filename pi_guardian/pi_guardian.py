@@ -1,5 +1,8 @@
+from asyncio import sleep
 import configparser
 import os
+import re
+import unicodedata
 
 import bcrypt
 from pi_guardian.mock_camera import MockCamera
@@ -66,5 +69,29 @@ class PiGuardian:
 
         return profiles
     
+    def add_profile(self, profile_name, files):
+                    # Remove leading/trailing whitespaces
+            profile_name = profile_name.strip()
+
+            # Replace spaces and special characters with underscores
+            profile_name = re.sub(r'\s+', '_', profile_name)
+            profile_name = re.sub(r'[^a-zA-Z0-9_]', '', profile_name)
+
+            # Normalize Unicode characters
+            profile_name = unicodedata.normalize('NFKD', profile_name).encode('ascii', 'ignore').decode('utf-8')
+
+            # Convert to lowercase
+            profile_name = profile_name.lower()
+
+            os.makedirs('dataset/' + profile_name, exist_ok=True)
+
+            for filename, filedata in files:
+                file_path = os.path.join('dataset/' + profile_name, filename)
+                with open(file_path, 'wb') as file:
+                    file.write(filedata)
+
+            # waits for the first file to be created to proceed
+            while not os.path.exists('dataset/' + profile_name + '/' + files[0][0]):
+                sleep(0.1)
 
             

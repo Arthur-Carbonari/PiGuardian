@@ -22,6 +22,10 @@ class NewProfileForm(FlaskForm):
     
     files = FileField('Image', render_kw={"placeholder": "Upload File", "multiple" : "True", "accept": ".jpg"})
 
+    submit = SubmitField('Add Profile')
+
+
+
 class SwitchThemeForm(FlaskForm):
     
     power_switch = SwitchField('Dark Mode', render_kw = {'onchange' : "sendSwitchValue()", 'id' : 'themeSwitch'})

@@ -66,14 +66,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="row p-3 modal-body">
-
-                <div class="align-self-center w-50 col">
-                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('api_blueprint.video_feed') }}">
-                </div>
                 
                 <div class="col w-50">
-                    {{ render_form(new_profile_form) }}
+                    {{ render_form(new_profile_form, render_kw={'enctype' : 'multipart/form-data'}) }}
                 </div>
+                
             </div>
 
             <div class="modal-footer">

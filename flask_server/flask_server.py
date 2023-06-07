@@ -44,6 +44,7 @@ class FlaskServer:
         self.app.authenticate_user = self.pi_guardian.authenticate_user
         self.app.get_profiles = self.pi_guardian.get_profiles
         self.app.update_flask_config = self.pi_guardian.update_flask_config
+        self.app.add_profile = self.pi_guardian.add_profile
         
 
     @login_manager.user_loader
