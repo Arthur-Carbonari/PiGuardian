@@ -13,13 +13,13 @@ from pi_guardian.camera import Camera
 from pi_guardian.email_handler import EmailHandler
 from pi_guardian.face_recognition_handler import FaceRecognitionHandler
 
+
 class PiGuardian:
 
     def __init__(self) -> None:
         self.face_recognition_handler = FaceRecognitionHandler()
         self.camera = Camera(self)
         self.email_handler = EmailHandler()
-        
 
         # Create a ConfigParser object
         self.config = configparser.ConfigParser()
@@ -27,10 +27,10 @@ class PiGuardian:
         # Load the .ini file
         self.config.read('config.ini')
 
-        self.path_to_videos_folder = self.config.get('General', 'path_to_videos_folder')
+        self.path_to_videos_folder = self.config.get(
+            'General', 'path_to_videos_folder')
 
         self.get_profiles()
-
 
     def generate_stream(self):
         while True:
@@ -40,12 +40,9 @@ class PiGuardian:
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-    def take_picture(self):
-        self.camera.save_frame('dataset/marina_cury/pic1')
-
     def get_flask_config(self):
         return dict(self.config.items('Flask'))
-    
+
     def update_flask_config(self, option, value):
         self.config.set('Flask', option, value)
         # Save the changes back to the .ini file
@@ -60,11 +57,14 @@ class PiGuardian:
             image = self.camera.get_frame()
             self.email_handler.send_email(email, image)
 
+        threading.Thread(target=self.take_photo).start()
+
+    def take_photo(self):
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        file_path = os.path.join( self.path_to_videos_folder, timestamp + '.jpg')
+        file_path = os.path.join(
+            self.path_to_videos_folder, timestamp + '.jpg')
         with open(file_path, 'wb') as file:
-            file.write(self.camera.get_frame)
-        
+            file.write(self.camera.get_frame())
 
     def authenticate_user(self, entered_username, entered_password):
         username = self.config.get('User', 'username')
@@ -72,14 +72,14 @@ class PiGuardian:
 
         if not password and entered_password == 'password' and entered_username == username:
             return True
-        
+
         return bcrypt.checkpw(entered_password.encode('utf-8'), password.encode('utf-8')) and entered_username == username
 
     def get_profiles(self):
         dataset_path = 'dataset'  # Path to the "dataset" folder
 
         profiles = []
-        
+
         for folder_name in os.listdir(dataset_path):
             folder_path = os.path.join(dataset_path, folder_name)
             if os.path.isdir(folder_path):
@@ -91,30 +91,29 @@ class PiGuardian:
                     profiles.append([profile_name, path_to_file])
 
         return profiles
-    
+
     def add_profile(self, profile_name, files):
-                    # Remove leading/trailing whitespaces
-            profile_name = profile_name.strip()
+        # Remove leading/trailing whitespaces
+        profile_name = profile_name.strip()
 
-            # Replace spaces and special characters with underscores
-            profile_name = re.sub(r'\s+', '_', profile_name)
-            profile_name = re.sub(r'[^a-zA-Z0-9_]', '', profile_name)
+        # Replace spaces and special characters with underscores
+        profile_name = re.sub(r'\s+', '_', profile_name)
+        profile_name = re.sub(r'[^a-zA-Z0-9_]', '', profile_name)
 
-            # Normalize Unicode characters
-            profile_name = unicodedata.normalize('NFKD', profile_name).encode('ascii', 'ignore').decode('utf-8')
+        # Normalize Unicode characters
+        profile_name = unicodedata.normalize('NFKD', profile_name).encode(
+            'ascii', 'ignore').decode('utf-8')
 
-            # Convert to lowercase
-            profile_name = profile_name.lower()
+        # Convert to lowercase
+        profile_name = profile_name.lower()
 
-            os.makedirs('dataset/' + profile_name, exist_ok=True)
+        os.makedirs('dataset/' + profile_name, exist_ok=True)
 
-            for filename, filedata in files:
-                file_path = os.path.join('dataset/' + profile_name, filename)
-                with open(file_path, 'wb') as file:
-                    file.write(filedata)
+        for filename, filedata in files:
+            file_path = os.path.join('dataset/' + profile_name, filename)
+            with open(file_path, 'wb') as file:
+                file.write(filedata)
 
-            # waits for the first file to be created to proceed
-            while not os.path.exists('dataset/' + profile_name + '/' + files[0][0]):
-                sleep(0.1)
-
-            
+        # waits for the first file to be created to proceed
+        while not os.path.exists('dataset/' + profile_name + '/' + files[0][0]):
+            sleep(0.1)
