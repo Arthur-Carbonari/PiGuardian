@@ -64,8 +64,9 @@ class Camera:
 
         encoder.output = [temp_output, save_file_output]
 
+        picam2.start_encoder(encoder)
+        picam2.start()
         temp_output.start()
-        picam2.start_recording(encoder)
 
 
         self.picam2 = picam2
