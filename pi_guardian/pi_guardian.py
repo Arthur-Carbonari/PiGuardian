@@ -2,16 +2,20 @@ from asyncio import sleep
 import configparser
 import os
 import re
+import threading
 import unicodedata
 
 import bcrypt
-# from pi_guardian.mock_camera import MockCamera
+
 from pi_guardian.camera import Camera
+from pi_guardian.email_handler import EmailHandler
 
 class PiGuardian:
 
-    def __init__(self, debug=False) -> None:
+    def __init__(self) -> None:
         self.camera = Camera()
+        self.email_handler = EmailHandler()
+        
 
         # Create a ConfigParser object
         self.config = configparser.ConfigParser()
@@ -20,6 +24,9 @@ class PiGuardian:
         self.config.read('config.ini')
 
         self.get_profiles()
+
+        threading.Thread(target=self.start_face_recognition).start()
+
 
     def generate_stream(self):
         while True:
@@ -40,6 +47,17 @@ class PiGuardian:
         # Save the changes back to the .ini file
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
+
+    def start_face_recognition(self):
+
+        look_for_stranger = self.camera.detect_faces()
+
+        for _ in look_for_stranger:
+            self.email_handler.send_email('arthurcarbonari99@gmail.com',
+                                          self.camera.get_frame())
+
+
+
 
     def authenticate_user(self, entered_username, entered_password):
         username = self.config.get('User', 'username')

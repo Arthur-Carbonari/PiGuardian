@@ -57,9 +57,6 @@ class Camera:
 
         self.picam2 = picam2
 
-        threading.Thread(target=self.detect_faces).start()
-
-
     def generate_stream(self):
         while True:
             with self.streaming_output.condition:
@@ -145,13 +142,8 @@ class Camera:
                                     currentname = name
 
                     if name == 'Unknown':
-                        # send email
-                        email_handler = EmailHandler()
-                        image = self.streaming_output.frame
-                        email_handler.send_email('arthurcarbonari99@gmail.com', image)
-                        print('email sent')
-                        return
-
+                        yield
+                        
                     # update the list of names
                     self.names.append(name.replace('_', ' '))
 
