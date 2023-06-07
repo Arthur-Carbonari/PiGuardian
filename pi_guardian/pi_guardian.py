@@ -1,5 +1,6 @@
 from asyncio import sleep
 import configparser
+import datetime
 import os
 import re
 import threading
@@ -58,7 +59,8 @@ class PiGuardian:
             image = self.camera.get_frame()
             self.email_handler.send_email(email, image)
 
-        self.camera.take_photo(self.path_to_videos_folder + '.jpg')
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        self.camera.take_photo(self.path_to_videos_folder + timestamp + '.jpg')
         
 
     def authenticate_user(self, entered_username, entered_password):
