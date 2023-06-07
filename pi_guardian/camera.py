@@ -82,17 +82,12 @@ class Camera:
         self.picam2.capture_file('test.jpg')
 
     def save_video(self, path, seconds):
-        if not self.recording_lock.acquire(blocking=False):
-            return
 
-        try:
             print ('trying to record')
             self.save_file_output.fileoutput = path
             self.save_file_output.start()
             time.sleep(seconds)
             self.save_file_output.stop()
-        finally:
-            self.recording_lock.release()
         
 
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
