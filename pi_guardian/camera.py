@@ -46,7 +46,7 @@ class Camera:
     def __init__(self):
         picam2 = Picamera2()
 
-        cam_config = picam2.create_video_configuration(main={"size": (320, 240)}, 
+        cam_config = picam2.create_video_configuration(main={"size": (640, 480)}, 
                                                        lores={"size": (320, 240), "format": "YUV420"}, 
                                                        transform=Transform(hflip=1,vflip=1))        
         
@@ -88,7 +88,7 @@ class Camera:
         with MappedArray(request, "main") as m:
             for ((top, right, bottom, left), name) in zip(self.boxes, self.names):
                 # draw the predicted face name on the image - color is in BGR
-                cv2.rectangle(m.array, (left, top), (right, bottom),
+                cv2.rectangle(m.array, (left* 2, top * 2), (right* 2, bottom* 2),
                     (0, 255, 225), 2)
                 y = top - 15 if top - 15 > 15 else top + 15
                 cv2.putText(m.array, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
@@ -164,7 +164,7 @@ class Camera:
 
 
                     # update the list of names
-                    self.names.append(name)
+                    self.names.append(name.replace('_', ' '))
                     print("current faces > ",self.names)
 
 
