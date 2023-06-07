@@ -108,7 +108,7 @@ class Camera:
             names = []
 
             # variables to draw_faces
-            self.picam2.post_callback = draw_faces
+            # self.picam2.post_callback = draw_faces
             buffer = self.picam2.capture_buffer("lores")
             grey = buffer[:s1 * h1].reshape((h1, s1))
             face_locations = face_box.detectMultiScale(grey, 1.1, 3)
