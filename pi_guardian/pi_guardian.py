@@ -26,8 +26,6 @@ class PiGuardian:
 
         self.get_profiles()
 
-        threading.Thread(target=self.start_face_recognition).start()
-
 
     def generate_stream(self):
         while True:

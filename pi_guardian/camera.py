@@ -6,10 +6,11 @@ from libcamera import Transform
 
 from imutils.video import VideoStream
 from imutils.video import FPS
-from pi_guardian.face_recognition_handler import FaceRecognitionHandler
+import face_recognition
 import pickle
 import time
 import cv2
+from pi_guardian.face_recognition_handler import FaceRecognitionHandler
 
 from pi_guardian.streaming_output import StreamingOutput
 
@@ -58,6 +59,9 @@ class Camera:
 
         self.picam2 = picam2
 
+        threading.Thread(target=self.detect_faces).start()
+
+
     def generate_stream(self):
         while True:
             with self.streaming_output.condition:
@@ -99,13 +103,17 @@ class Camera:
             
             # frame = imutils.resize(frame, width=500)
             # Detect the fce boxes
-            return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)         
+            return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+         
 
+    def detect_faces(self):
 
-    def highlight_faces(self, boxes, names):
-        self.boxes, self.names = boxes, names
+        face_recognition_handler = FaceRecognitionHandler()
+        while True:
 
- 
+            rgb_image = self.camera.get_rgb_image()
+            self.boxes, self.names = face_recognition_handler.look_for_faces(rgb_image)
+                    
 
 
 
