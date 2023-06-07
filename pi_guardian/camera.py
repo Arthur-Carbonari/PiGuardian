@@ -12,7 +12,6 @@ import pickle
 import time
 import cv2
 import numpy as np
-from pi_guardian.email_handler import EmailHandler
 
 from pi_guardian.streaming_output import StreamingOutput
 
@@ -49,7 +48,7 @@ class Camera:
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
         self.s1 = picam2.stream_configuration("lores")["stride"]
 
-        self.face_boxes = []
+        self.boxes = []
         self.names = []
 
         self.streaming_output = StreamingOutput()
@@ -58,6 +57,7 @@ class Camera:
         self.picam2 = picam2
 
         threading.Thread(target=self.detect_faces).start()
+
 
     def generate_stream(self):
         while True:
@@ -76,7 +76,7 @@ class Camera:
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
     def draw_faces(self, request):
         with MappedArray(request, "main") as m:
-            for ((top, right, bottom, left), name) in zip(self.face_boxes, self.names):
+            for ((top, right, bottom, left), name) in zip(self.boxes, self.names):
                 # draw the predicted face name on the image - color is in BGR
                 cv2.rectangle(m.array, (left* 2, top * 2), (right* 2, bottom* 2),
                     (0, 255, 225), 2)
@@ -115,10 +115,9 @@ class Camera:
             self.names = []
 
             output = self.get_face_recognition_frame()
-
-            self.face_boxes = face_recognition.face_locations(output)
+            self.boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
-            encodings = face_recognition.face_encodings(output, self.face_boxes)
+            encodings = face_recognition.face_encodings(output, self.boxes)
 
             # loop over the facial embeddings
             for encoding in encodings:
@@ -148,6 +147,7 @@ class Camera:
 
                             if currentname != name:
                                     currentname = name
+                                    print(name)
                         
                     # update the list of names
                     self.names.append(name.replace('_', ' '))
