@@ -1,8 +1,9 @@
-import datetime
+
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 import smtplib
 from email.mime.text import MIMEText
+import time
 
 class EmailHandler:
 
@@ -11,12 +12,12 @@ class EmailHandler:
     email_server = 'smtp.gmail.com'
     email_port = 587
 
-    email_timeout = 60
+    email_timeout = 600
     last_email_time = 0
 
     def send_email(self, destination_address, image):
 
-        current_time = datetime.datetime.now().time().minutes()
+        current_time = time.time()
 
         if current_time - self.last_email_time < 30:
             return
