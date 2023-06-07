@@ -2,6 +2,7 @@
 import pickle
 import time
 import face_recognition
+from pi_guardian.train_model import parse_dataset
 
 
 
@@ -10,6 +11,8 @@ class FaceRecognitionHandler:
     encodingsP = "encodings.pickle"
 
     def __init__(self) -> None:
+
+        parse_dataset()
         #Determine faces from encodings.pickle file model created from train_model.py
 
         # load the known faces and embeddings along with OpenCV's Haar

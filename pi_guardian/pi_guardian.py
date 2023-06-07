@@ -61,7 +61,9 @@ class PiGuardian:
             self.email_handler.send_email(email, image)
 
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        self.camera.take_photo(self.path_to_videos_folder + '/' + timestamp + '.jpg')
+        file_path = os.path.join( self.path_to_videos_folder, timestamp + '.jpg')
+        with open(file_path, 'wb') as file:
+            file.write(self.camera.get_frame)
         
 
     def authenticate_user(self, entered_username, entered_password):
