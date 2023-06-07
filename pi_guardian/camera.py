@@ -33,15 +33,7 @@ time.sleep(2.0)
 boxes = []
 names = []
 
-# this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
-def draw_faces(request):
-    with MappedArray(request, "main") as m:
-        for (top, right, bottom, left), name in zip(boxes, names):
 
-            # draw the predicted face name on the image - color is in BGR
-            cv2.rectangle(m.array, (left, top), (right, bottom),(0, 255, 225), 2) 
-            y = top - 15 if top - 15 > 15 else top + 15
-            cv2.putText(m.array, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 255, 255), 2)
 
 class Camera:
 
@@ -64,7 +56,11 @@ class Camera:
             with MappedArray(request, "main") as m:
                 cv2.putText(m.array, timestamp, origin, font, scale, colour, thickness)
 
-        picam2.post_callback = apply_timestamp
+        picam2.post_callback = self.draw_faces
+
+        (self.w0, self.h0) = self.picam2.stream_configuration("main")["size"]
+        (self.w1, self.h1) = self.picam2.stream_configuration("lores")["size"]
+        self.faces_locations = []
 
         self.streaming_output = StreamingOutput()
         picam2.start_recording(JpegEncoder(), FileOutput(self.streaming_output))
@@ -88,9 +84,15 @@ class Camera:
     def take_photo(self):
         self.picam2.capture_file('test.jpg')
 
+    # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
+    def draw_faces(self, request):
+        with MappedArray(request, "main") as m:
+            for f in self.faces_locations:
+                (x, y, w, h) = [c * n // d for c, n, d in zip(f, (self.w0, self.h0) * 2, (self.w1, self.h1) * 2)]
+                cv2.rectangle(m.array, (x, y), (x + w, y + h), (0, 255, 0, 0))
+
     def detect_faces(self):
-        (w0, h0) = self.picam2.stream_configuration("main")["size"]
-        (w1, h1) = self.picam2.stream_configuration("lores")["size"]
+
         s1 = self.picam2.stream_configuration("lores")["stride"]
 
         currentname = "unknown"
@@ -110,8 +112,8 @@ class Camera:
             # variables to draw_faces
             # self.picam2.post_callback = draw_faces
             buffer = self.picam2.capture_buffer("lores")
-            grey = buffer[:s1 * h1].reshape((h1, s1))
-            face_locations = face_box.detectMultiScale(grey, 1.1, 3)
+            grey = buffer[:s1 * self.h1].reshape((self.h1, s1))
+            self.face_locations = face_box.detectMultiScale(grey, 1.1, 3)
 
 
             # loop over the facial embeddings
