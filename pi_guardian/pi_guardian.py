@@ -56,8 +56,6 @@ class PiGuardian:
             
 
 
-
-
     def authenticate_user(self, entered_username, entered_password):
         username = self.config.get('User', 'username')
         password = self.config.get('User', 'password')

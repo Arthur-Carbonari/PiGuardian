@@ -52,6 +52,8 @@ class Camera:
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
+        self.s1 = self.picam2.stream_configuration("lores")["stride"]
+
         self.face_locations = []
 
         self.boxes = []
@@ -100,9 +102,9 @@ class Camera:
         self.draw_faces(request)
         self.apply_timestamp(request)
 
-    def get_face_detection_frame(self, s1):
+    def get_face_detection_frame(self):
             buffer = self.picam2.capture_buffer('lores')
-            frame = buffer[:s1 * self.h1].reshape((self.h1, s1))
+            frame = buffer[:self.s1 * self.h1].reshape((self.h1, self.s1))
             
             # frame = imutils.resize(frame, width=500)
             # Detect the fce boxes
@@ -111,15 +113,13 @@ class Camera:
 
     def detect_faces(self):
 
-        s1 = self.picam2.stream_configuration("lores")["stride"]
-
         currentname = "unknown"
 
         while True:
             # grab the frame from the threaded video stream and resize it
             # to 500px (to speedup processing)
 
-            output = self.get_face_detection_frame(s1)
+            output = self.get_face_detection_frame()
 
             self.boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
