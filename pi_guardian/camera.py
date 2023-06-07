@@ -58,8 +58,8 @@ class Camera:
 
         picam2.post_callback = self.draw_faces
 
-        (self.w0, self.h0) = self.picam2.stream_configuration("main")["size"]
-        (self.w1, self.h1) = self.picam2.stream_configuration("lores")["size"]
+        (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
+        (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
         self.faces_locations = []
 
         self.streaming_output = StreamingOutput()
