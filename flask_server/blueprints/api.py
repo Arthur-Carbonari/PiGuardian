@@ -17,7 +17,7 @@ def video_feed():
 @api_blueprint.route('/pic')
 def take_picture():
     current_app.pi_guardian.take_picture()
-    return redirect(url_for('views_blueprint.profiles'))
+    return redirect(url_for('views_blueprint.home'))
 
 @api_blueprint.route('/change_theme', methods=['POST'])
 def change_theme():
