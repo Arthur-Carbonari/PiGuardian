@@ -22,7 +22,17 @@ encodingsP = "encodings.pickle"
 # cascade for face detection
 print("[INFO] loading encodings + face detector...")
 data = pickle.loads(open(encodingsP, "rb").read())
+
+
+# use the grey cascate for cv2 recognise face
+face_box = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
+
+
 time.sleep(2.0)
+
+boxes = []
+names = []
+
 
 
 class Camera:
@@ -46,7 +56,7 @@ class Camera:
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
-        self.s1 = picam2.stream_configuration("lores")["stride"]
+        self.face_locations = []
 
         self.boxes = []
         self.names = []
@@ -94,64 +104,67 @@ class Camera:
         self.draw_faces(request)
         self.apply_timestamp(request)
 
-
-    def get_face_recognition_frame(self):
-        # grab the buffer from the current stream
-        buffer = self.picam2.capture_buffer('lores')
-        frame = buffer[:self.s1 * self.h1].reshape((self.h1, self.s1))
-        
-        # frame = imutils.resize(frame, width=500)
-        # Detect the fce boxes
-        return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-         
-
     def detect_faces(self):
+
+        s1 = self.picam2.stream_configuration("lores")["stride"]
 
         currentname = "unknown"
 
         while True:
-
-            # Resets names
-            self.names = []
-
-            output = self.get_face_recognition_frame()
+            # grab the frame from the threaded video stream and resize it
+            # to 500px (to speedup processing)
+            buffer = self.picam2.capture_buffer('lores')
+            frame = buffer[:s1 * self.h1].reshape((self.h1, s1))
+            
+            # frame = imutils.resize(frame, width=500)
+            # Detect the fce boxes
+            output = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             self.boxes = face_recognition.face_locations(output)
             # compute the facial embeddings for each face bounding box
             encodings = face_recognition.face_encodings(output, self.boxes)
+            self.names = []
+
+            # variables to draw_faces
+            # self.picam2.post_callback = draw_faces
+            buffer = self.picam2.capture_buffer("lores")
+            grey = buffer[:s1 * self.h1].reshape((self.h1, s1))
+            self.face_locations = face_box.detectMultiScale(grey, 1.1, 3)
+
 
             # loop over the facial embeddings
             for encoding in encodings:
-                    
                     # attempt to match each face in the input image to our known
                     # encodings
                     matches = face_recognition.compare_faces(data["encodings"], encoding)
                     name = "Unknown" #if face is not recognized, then print Unknown
 
-                    # check to see if we have found a match
+            # check to see if we have found a match
                     if True in matches:
-                            # find the indexes of all matched faces then initialize a
-                            # dictionary to count the total number of times each face
-                            # was matched
+                # find the indexes of all matched faces then initialize a
+                # dictionary to count the total number of times each face
+                # was matched
                             matchedIdxs = [i for (i, b) in enumerate(matches) if b]
                             counts = {}
 
-                            # loop over the matched indexes and maintain a cout for
-                            # each recognized face face
+                # loop over the matched indexes and maintain a cout for
+                # each recognized face face
                             for i in matchedIdxs:
                                     name = data["names"][i]
                                     counts[name] = counts.get(name, 0) + 1
 
-                            # determine the recognized face with the largest number
-                            # of votes
+                # determine the recognized face with the largest number
+                # of votes (note: in the event of an unlikely tie Python
+                # will select first entry in the dictionary)
                             name = max(counts, key=counts.get)
 
+                #If someone in your dataset is identified, print their name on the screen
                             if currentname != name:
                                     currentname = name
-                                    print(name)
-                        
+                                    print(currentname)
+
+
                     # update the list of names
                     self.names.append(name.replace('_', ' '))
-
                     print("current faces > ",self.names)
 
 
