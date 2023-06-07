@@ -32,6 +32,9 @@ face_box = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_fr
 
 time.sleep(2.0)
 
+boxes = None
+names = None
+
 # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
 def draw_faces(request):
     with MappedArray(request, "main") as m:
