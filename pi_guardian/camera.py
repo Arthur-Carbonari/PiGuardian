@@ -52,7 +52,7 @@ class Camera:
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
-        self.s1 = self.picam2.stream_configuration("lores")["stride"]
+        self.s1 = picam2.stream_configuration("lores")["stride"]
 
         self.face_locations = []
 
@@ -113,7 +113,7 @@ class Camera:
 
     def detect_faces(self):
 
-        currentname = "unknown"
+        currentname = "Unknown"
 
         while True:
             # grab the frame from the threaded video stream and resize it
