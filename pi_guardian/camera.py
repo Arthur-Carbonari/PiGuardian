@@ -56,7 +56,7 @@ class Camera:
             with MappedArray(request, "main") as m:
                 cv2.putText(m.array, timestamp, origin, font, scale, colour, thickness)
 
-        picam2.post_callback = self.draw_faces
+        picam2.post_callback = [self.draw_faces, apply_timestamp]
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
