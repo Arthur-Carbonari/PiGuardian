@@ -35,7 +35,6 @@ names = []
 
 # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
 def draw_faces(request):
-    print('was called')
     with MappedArray(request, "main") as m:
         for (top, right, bottom, left), name in zip(boxes, names):
 
@@ -65,14 +64,10 @@ class Camera:
             with MappedArray(request, "main") as m:
                 cv2.putText(m.array, timestamp, origin, font, scale, colour, thickness)
 
-        encoder = JpegEncoder()
+        picam2.post_callback = apply_timestamp
+
         self.streaming_output = StreamingOutput()
-        fileout = FileOutput(self.streaming_output)
-        encoder.output = [fileout]
-
-
-        picam2.start_encoder(encoder)
-        picam2.start()
+        picam2.start_recording(JpegEncoder(), FileOutput(self.streaming_output))
 
         self.picam2 = picam2
 
