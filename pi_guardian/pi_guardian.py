@@ -5,15 +5,13 @@ import re
 import unicodedata
 
 import bcrypt
-from pi_guardian.mock_camera import MockCamera
-
+# from pi_guardian.mock_camera import MockCamera
+from pi_guardian.camera import Camera
 
 class PiGuardian:
 
     def __init__(self, debug=False) -> None:
-        self.camera = MockCamera()
-
-        self.camera.start_capture()
+        self.camera = Camera()
 
         # Create a ConfigParser object
         self.config = configparser.ConfigParser()
