@@ -14,8 +14,9 @@ from pi_guardian.face_recognition_handler import FaceRecognitionHandler
 class PiGuardian:
 
     def __init__(self) -> None:
-        self.camera = Camera()
+        self.camera = Camera(self)
         self.email_handler = EmailHandler()
+        self.face_recognition_handler = FaceRecognitionHandler()
         
 
         # Create a ConfigParser object
@@ -47,15 +48,9 @@ class PiGuardian:
         with open('config.ini', 'w') as configfile:
             self.config.write(configfile)
 
-    def start_face_recognition(self):
+    def stranger_spotted(self):
 
-        face_recognition_handler = FaceRecognitionHandler()
-
-        while True:
-
-            rgb_image = self.camera.get_rgb_image()
-            boxes, names = face_recognition_handler.look_for_faces(rgb_image)
-            self.camera.highlight_faces(boxes, names)
+        print('i dont know youuu')
 
 
     def authenticate_user(self, entered_username, entered_password):

@@ -34,8 +34,9 @@ class Camera:
     scale = 0.5
     thickness = 2
 
-    def __init__(self):
+    def __init__(self, pi_guardian):
         picam2 = Picamera2()
+        self.pi_guardian = pi_guardian
 
         cam_config = picam2.create_video_configuration(main={"size": (640, 480)}, 
                                                        lores={"size": (320, 240), "format": "YUV420"}, 
@@ -108,11 +109,13 @@ class Camera:
 
     def detect_faces(self):
 
-        face_recognition_handler = FaceRecognitionHandler()
         while True:
 
             rgb_image = self.get_rgb_image()
-            self.boxes, self.names = face_recognition_handler.look_for_faces(rgb_image)
+            self.boxes, self.names = self.pi_guardian.face_recognition_handler.look_for_faces(rgb_image)
+
+            if 'Unkown' in self.names:
+                self.pi_guardian.stranger_spotted()
                     
 
 
