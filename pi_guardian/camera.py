@@ -38,6 +38,8 @@ class Camera:
         picam2 = Picamera2()
         self.pi_guardian = pi_guardian
 
+        self.recording_lock = threading.Lock()
+
         cam_config = picam2.create_video_configuration(main={"size": (640, 480)}, 
                                                        lores={"size": (320, 240), "format": "YUV420"}, 
                                                        transform=Transform(hflip=1,vflip=1))        
@@ -60,33 +62,38 @@ class Camera:
         encoder = JpegEncoder()
 
         temp_output = FileOutput(self.streaming_output)
-        save_file_output = FileOutput()
+        self.save_file_output = FileOutput()
 
-        encoder.output = [temp_output, save_file_output]
+        encoder.output = [temp_output, self.save_file_output]
 
         picam2.start_encoder(encoder)
         picam2.start()
-        temp_output.start()
 
+        temp_output.start()
 
         self.picam2 = picam2
 
         threading.Thread(target=self.detect_faces).start()
-
-
-    def generate_stream(self):
-        while True:
-            with self.streaming_output.condition:
-                self.streaming_output.condition.wait()
-                frame = self.streaming_output.frame
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
             
     def get_frame(self):
         return self.streaming_output.frame
             
     def take_photo(self):
         self.picam2.capture_file('test.jpg')
+
+    def save_video(self, path, seconds):
+        if not self.recording_lock.acquire(blocking=False):
+            return
+
+        try:
+            'trying to record'
+            self.save_file_output.fileoutput = path
+            self.save_file_output.start()
+            time.sleep(seconds)
+            self.save_file_output.stop()
+        finally:
+            self.recording_lock.release()
+        
 
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
     def draw_faces(self, request):
