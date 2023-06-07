@@ -50,7 +50,11 @@ class PiGuardian:
 
     def stranger_spotted(self):
 
-        print('i dont know youuu')
+        # if self.config.get('')
+        print('i dont know you')
+        image = self.camera.get_frame()
+
+        
 
 
     def authenticate_user(self, entered_username, entered_password):
