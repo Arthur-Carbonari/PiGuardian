@@ -31,13 +31,15 @@ class EmailHandler:
 
         msg.attach(MIMEText("An unkown person was spotted at one of your protected locations", 'plain'))
 
+
         # Create an image attachment
         image_attachment = MIMEImage(image)
         image_attachment.add_header('Content-Disposition', 'attachment', filename='image.jpg')
         msg.attach(image_attachment)
 
+        print(image)
+
         with smtplib.SMTP(self.email_server, self.email_port) as server:
             server.starttls()
             server.login(self.email_address, self.email_password)
             server.sendmail(self.email_address, msg['To'], msg.as_string())
-

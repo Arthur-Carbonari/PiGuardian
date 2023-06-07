@@ -23,7 +23,7 @@ encodingsP = "encodings.pickle"
 # cascade for face detection
 print("[INFO] loading encodings + face detector...")
 data = pickle.loads(open(encodingsP, "rb").read())
-time.sleep(1)
+time.sleep(2.0)
 
 
 class Camera:
