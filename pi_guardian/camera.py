@@ -37,6 +37,12 @@ names = []
 
 class Camera:
 
+    colour = (0, 255, 0)
+    origin = (0, 30)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    scale = 1
+    thickness = 2
+
     def __init__(self):
         picam2 = Picamera2()
 
@@ -46,17 +52,7 @@ class Camera:
         
         picam2.configure(cam_config)
 
-        colour = (0, 255, 0)
-        origin = (0, 30)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        scale = 1
-        thickness = 2
-        def apply_timestamp(request):
-            timestamp = time.strftime("%Y-%m-%d %X")
-            with MappedArray(request, "main") as m:
-                cv2.putText(m.array, timestamp, origin, font, scale, colour, thickness)
-
-        picam2.post_callback = [self.draw_faces, apply_timestamp]
+        picam2.post_callback = self.post_callback
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
@@ -90,6 +86,16 @@ class Camera:
             for f in self.face_locations:
                 (x, y, w, h) = [c * n // d for c, n, d in zip(f, (self.w0, self.h0) * 2, (self.w1, self.h1) * 2)]
                 cv2.rectangle(m.array, (x, y), (x + w, y + h), (0, 255, 0, 0))
+
+    def apply_timestamp(self, request):
+        timestamp = time.strftime("%Y-%m-%d %X")
+        with MappedArray(request, "main") as m:
+            cv2.putText(m.array, timestamp, self.origin, self.font, 
+                        self.scale, self.colour, self.thickness)
+            
+    def post_callback(self, request):
+        self.apply_timestamp(request)
+        self.draw_faces(request)
 
     def detect_faces(self):
 
