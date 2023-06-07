@@ -57,7 +57,7 @@ class PiGuardian:
             self.email_handler.send_email(email, image)
 
         # record and save video
-        self.camera.save_video('/media/pi/Project/test.h264', 60)
+        threading.Thread(target=self.detect_faces).start()
 
 
     def authenticate_user(self, entered_username, entered_password):
