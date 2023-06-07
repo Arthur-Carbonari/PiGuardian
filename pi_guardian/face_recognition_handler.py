@@ -1,7 +1,7 @@
 
 import pickle
 import time
-import pi_guardian.face_recognition_handler as face_recognition_handler
+import face_recognition
 
 
 
@@ -19,16 +19,16 @@ class FaceRecognitionHandler:
         time.sleep(2.0)
 
     def look_for_faces(self, rgb_image):
-        boxes = face_recognition_handler.face_locations(rgb_image)
+        boxes = face_recognition.face_locations(rgb_image)
         # compute the facial embeddings for each face bounding box
-        encodings = face_recognition_handler.face_encodings(rgb_image, self.boxes)
+        encodings = face_recognition.face_encodings(rgb_image, self.boxes)
         names = []
 
         # loop over the facial embeddings
         for encoding in encodings:
                 # attempt to match each face in the input image to our known
                 # encodings
-                matches = face_recognition_handler.compare_faces(self.data["encodings"], encoding)
+                matches = face_recognition.compare_faces(self.data["encodings"], encoding)
                 name = "Unknown" #if face is not recognized, then print Unknown
 
                 # check to see if we have found a match
