@@ -60,7 +60,7 @@ class PiGuardian:
         self.take_photo()
 
     def take_photo(self):
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        timestamp = time.strftime("%Y%m%d/%H%M%S")
         file_path = os.path.join(
             self.path_to_videos_folder, timestamp + '.jpg')
         with open(file_path, 'wb') as file:
