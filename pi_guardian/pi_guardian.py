@@ -60,9 +60,14 @@ class PiGuardian:
         self.take_photo()
 
     def take_photo(self):
-        timestamp = time.strftime("%Y%m%d/%H%M%S")
-        file_path = os.path.join(
-            self.path_to_videos_folder, timestamp + '.jpg')
+        dir_name, file_name = time.strftime("%Y%m%d-%H%M%S").split('-')
+
+        folder_path = self.path_to_videos_folder + '/' + dir_name
+
+        if not os.path.exists(folder_path):
+            os.mkdir(folder_path)
+
+        file_path = os.path.join(folder_path, file_name + '.jpg')
         with open(file_path, 'wb') as file:
             file.write(self.camera.get_frame())
 
