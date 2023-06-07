@@ -4,6 +4,7 @@ import datetime
 import os
 import re
 import threading
+import time
 import unicodedata
 
 import bcrypt
@@ -59,7 +60,7 @@ class PiGuardian:
             image = self.camera.get_frame()
             self.email_handler.send_email(email, image)
 
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
         self.camera.take_photo(self.path_to_videos_folder + timestamp + '.jpg')
         
 
