@@ -48,11 +48,15 @@ class PiGuardian:
 
     def start_face_recognition(self):
 
-        look_for_stranger = self.camera.detect_faces()
+        currentname = "Unknown"
+        
+        while True:
 
-        for _ in look_for_stranger:
-            self.email_handler.send_email('arthurcarbonari99@gmail.com',
-                                          self.camera.get_frame())
+            output = self.camera.get_rgb_image()
+
+
+
+        
             
 
 
