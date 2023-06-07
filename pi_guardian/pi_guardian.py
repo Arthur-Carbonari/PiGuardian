@@ -57,7 +57,7 @@ class PiGuardian:
             image = self.camera.get_frame()
             self.email_handler.send_email(email, image)
 
-        threading.Thread(target=self.take_photo).start()
+        self.take_photo()
 
     def take_photo(self):
         timestamp = time.strftime("%Y%m%d-%H%M%S")

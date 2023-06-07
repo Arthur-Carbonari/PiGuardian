@@ -119,7 +119,7 @@ class Camera:
             self.boxes, self.names = self.pi_guardian.face_recognition_handler.look_for_faces(rgb_image)
 
             if 'Unknown' in self.names:
-                self.pi_guardian.stranger_spotted()
+                threading.Thread(target=self.pi_guardian.stranger_spotted).start()
                     
 
 
