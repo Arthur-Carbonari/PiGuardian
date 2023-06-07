@@ -16,7 +16,7 @@ class EmailHandler:
 
     def send_email(self, destination_address, image):
 
-        current_time = datetime.now().time().minutes()
+        current_time = datetime.datetime.now().time().minutes()
 
         if current_time - self.last_email_time < 30:
             return
