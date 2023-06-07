@@ -25,6 +25,8 @@ class PiGuardian:
         # Load the .ini file
         self.config.read('config.ini')
 
+        self.path_to_videos_folder = self.config.get('General', 'path_to_videos_folder')
+
         self.get_profiles()
 
 
@@ -56,8 +58,8 @@ class PiGuardian:
             image = self.camera.get_frame()
             self.email_handler.send_email(email, image)
 
-        # record and save video
-        threading.Thread(target=self.camera.save_video, args=('/media/pi/Project/test.mjpeg', 60)).start()
+        self.camera.take_photo(self.path_to_videos_folder + '.jpg')
+        
 
     def authenticate_user(self, entered_username, entered_password):
         username = self.config.get('User', 'username')

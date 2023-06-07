@@ -78,18 +78,9 @@ class Camera:
     def get_frame(self):
         return self.streaming_output.frame
             
-    def take_photo(self):
-        self.picam2.capture_file('test.jpg')
-
-    def save_video(self, path, seconds):
-
-            print ('trying to record')
-            self.save_file_output.fileoutput = path
-            self.save_file_output.start()
-            time.sleep(seconds)
-            self.save_file_output.stop()
+    def take_photo(self, path):
+        self.picam2.capture_file(path)
         
-
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
     def draw_faces(self, request):
         with MappedArray(request, "main") as m:
