@@ -15,8 +15,6 @@ import numpy as np
 
 from pi_guardian.streaming_output import StreamingOutput
 
-#Initialize 'currentname' to trigger only when a new person is identified.
-currentname = "unknown"
 #Determine faces from encodings.pickle file model created from train_model.py
 encodingsP = "encodings.pickle"
 
@@ -37,6 +35,7 @@ names = []
 
 # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
 def draw_faces(request):
+    print('was called')
     with MappedArray(request, "main") as m:
         for (top, right, bottom, left), name in zip(boxes, names):
 
@@ -58,9 +57,12 @@ class Camera:
 
         encoder = JpegEncoder()
         self.streaming_output = StreamingOutput()
-        encoder.output = [FileOutput(self.streaming_output)]
+        fileout = FileOutput(self.streaming_output)
+        encoder.output = [fileout]
+
 
         picam2.start_encoder(encoder)
+        picam2.pre_callback = draw_faces
         picam2.start()
 
         self.picam2 = picam2
@@ -86,6 +88,8 @@ class Camera:
         (w0, h0) = self.picam2.stream_configuration("main")["size"]
         (w1, h1) = self.picam2.stream_configuration("lores")["size"]
         s1 = self.picam2.stream_configuration("lores")["stride"]
+
+        currentname = "unknown"
 
         while True:
             # grab the frame from the threaded video stream and resize it
