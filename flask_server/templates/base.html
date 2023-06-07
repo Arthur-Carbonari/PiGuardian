@@ -1,3 +1,5 @@
+{% from 'bootstrap5/form.html' import render_form %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,9 +52,9 @@
                     <strong>mdo</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        {{render_form(get_theme_switch_form())}}
+                    </li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ url_for('auth_blueprint.logout') }}">Sign out</a></li>
                 </ul>
@@ -73,6 +75,24 @@
 
     <!-- Bootstrap JS -->
     {{ bootstrap.load_js() }}
+
+    <script>
+        function sendSwitchValue() {
+          var switchElement = document.getElementById('themeSwitch');
+          var switchValue = switchElement.checked;
+    
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/change_theme', true);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              console.log('Switch value sent successfully');
+              location.reload(); // Refresh the page
+            }
+          };
+          xhr.send('switchValue=' + switchValue);
+        }
+      </script>
 
 </body>
 

@@ -29,10 +29,16 @@ class PiGuardian:
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def take_picture(self):
-        self.camera.save_frame('dataset/arthur_martins/pic1')
+        self.camera.save_frame('dataset/marina_cury/pic1')
 
     def get_flask_config(self):
         return dict(self.config.items('Flask'))
+    
+    def update_flask_config(self, option, value):
+        self.config.set('Flask', option, value)
+        # Save the changes back to the .ini file
+        with open('config.ini', 'w') as configfile:
+            self.config.write(configfile)
 
     def authenticate_user(self, entered_username, entered_password):
         username = self.config.get('User', 'username')
@@ -59,4 +65,6 @@ class PiGuardian:
                     profiles.append([profile_name, path_to_file])
 
         return profiles
+    
+
             

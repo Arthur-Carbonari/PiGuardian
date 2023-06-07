@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
 <div class="row">
@@ -7,7 +8,9 @@
 
         <p>These are your users safely registered with us.</p>
 
-        <button class="btn btn-primary new-button float-end"> New Profile <i class="fa fa-plus p-1" aria-hidden="true"></i> </button>
+        <button class="btn btn-primary new-button float-end" data-bs-toggle="modal" data-bs-target="#newProfileModal">
+            New Profile <i class="fa fa-plus p-1" aria-hidden="true"></i>
+        </button>
     </div>
 </div>
 
@@ -33,7 +36,8 @@
                                     </button>
                                 </div>
                                 <div class="overflow-hidden" style="height: 200px;">
-                                    <img src="{{ url_for('api_blueprint.static', filename=profile[1]) }}" class="img-fluid" width="260px" height="195px">
+                                    <img src="{{ url_for('api_blueprint.static', filename=profile[1]) }}"
+                                        class="img-fluid" width="260px" height="195px">
                                 </div>
                                 <div class="file-name p-2 pt-3 text-center">
                                     <h4 class="m-b-5 text-muted text-capitalize">{{ profile[0] }}</h4>
@@ -52,6 +56,32 @@
         </div>
     </div>
 
+</div>
+
+<div class="modal fade" id="newProfileModal" tabindex="-1" aria-labelledby="newProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">New Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="row p-3 modal-body">
+
+                <div class="align-self-center w-50 col">
+                    <img class="camera-bg img-fluid" class="center" src="{{ url_for('api_blueprint.video_feed') }}">
+                </div>
+                
+                <div class="col w-50">
+                    {{ render_form(new_profile_form) }}
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Add new profile</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

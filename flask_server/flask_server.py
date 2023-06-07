@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, current_app
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
+from flask_server.forms import SwitchThemeForm
 
 from flask_server.models import User
 from flask_server.blueprints.auth import auth_blueprint
@@ -42,6 +43,7 @@ class FlaskServer:
         # Register methods
         self.app.authenticate_user = self.pi_guardian.authenticate_user
         self.app.get_profiles = self.pi_guardian.get_profiles
+        self.app.update_flask_config = self.pi_guardian.update_flask_config
         
 
     @login_manager.user_loader
@@ -61,6 +63,12 @@ class FlaskServer:
         user = User()
         user.id = username
         return user
+    
+    @app.context_processor
+    def utility_processor():
+        def get_theme_switch_form():
+            return SwitchThemeForm().check(current_app.config['BOOTSTRAP_BOOTSWATCH_THEME'] == 'darkly')
+        return dict(get_theme_switch_form=get_theme_switch_form)
 
     def start(self, debug=False):
         self.app.run(host='0.0.0.0', port=5000, debug=debug)

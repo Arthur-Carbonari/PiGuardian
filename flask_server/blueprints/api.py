@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, current_app, redirect, render_template, url_for
+from flask import Blueprint, Response, current_app, redirect, render_template, request, url_for
 from flask_login import login_required
 
 
@@ -18,3 +18,10 @@ def video_feed():
 def take_picture():
     current_app.pi_guardian.take_picture()
     return redirect(url_for('views_blueprint.profiles'))
+
+@api_blueprint.route('/change_theme', methods=['POST'])
+def change_theme():
+    dark_mode = request.form.get('switchValue') == 'true'
+    current_app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'darkly' if dark_mode else 'lumen'
+    current_app.update_flask_config('dark_mode' , 'True' if dark_mode else '')
+    return 'sucess'
