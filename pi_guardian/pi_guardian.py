@@ -9,6 +9,7 @@ import bcrypt
 
 from pi_guardian.camera import Camera
 from pi_guardian.email_handler import EmailHandler
+from pi_guardian.face_recognition_handler import FaceRecognitionHandler
 
 class PiGuardian:
 
@@ -24,6 +25,8 @@ class PiGuardian:
         self.config.read('config.ini')
 
         self.get_profiles()
+
+        threading.Thread(target=self.start_face_recognition).start()
 
 
     def generate_stream(self):
@@ -49,15 +52,13 @@ class PiGuardian:
     def start_face_recognition(self):
 
         currentname = "Unknown"
-        
+        face_recognition_handler = FaceRecognitionHandler()
+
         while True:
 
-            output = self.camera.get_rgb_image()
-
-
-
-        
-            
+            rgb_image = self.get_rgb_image()
+            boxes, names = face_recognition_handler.look_for_faces(rgb_image)
+            self.camera.highlight_faces(boxes, names)
 
 
     def authenticate_user(self, entered_username, entered_password):
