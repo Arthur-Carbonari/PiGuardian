@@ -24,6 +24,9 @@ class FaceRecognitionHandler:
         encodings = face_recognition.face_encodings(rgb_image, boxes)
         names = []
 
+        currentname = "Unknown" #if face is not recognized, then print Unknown
+
+
         # loop over the facial embeddings
         for encoding in encodings:
                 # attempt to match each face in the input image to our known
