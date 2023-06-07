@@ -31,6 +31,9 @@ class Camera:
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
             
+    def get_frame(self):
+        return self.streaming_output.frame
+            
     def take_photo(self):
         self.picam2.capture_file('test.jpg')
 
