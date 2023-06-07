@@ -55,6 +55,16 @@ class Camera:
         
         picam2.configure(cam_config)
 
+        colour = (0, 255, 0)
+        origin = (0, 30)
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        scale = 1
+        thickness = 2
+        def apply_timestamp(request):
+            timestamp = time.strftime("%Y-%m-%d %X")
+            with MappedArray(request, "main") as m:
+                cv2.putText(m.array, timestamp, origin, font, scale, colour, thickness)
+
         encoder = JpegEncoder()
         self.streaming_output = StreamingOutput()
         fileout = FileOutput(self.streaming_output)
@@ -62,7 +72,6 @@ class Camera:
 
 
         picam2.start_encoder(encoder)
-        picam2.pre_callback = draw_faces
         picam2.start()
 
         self.picam2 = picam2
