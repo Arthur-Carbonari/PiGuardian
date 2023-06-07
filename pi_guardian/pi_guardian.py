@@ -60,7 +60,7 @@ class PiGuardian:
         self.take_photo()
 
     def take_photo(self):
-        dir_name, file_name = time.strftime("%Y%m%d-%H%M%S").split('-')
+        dir_name, file_name = time.strftime("%Y-%m-%d=%H-%M-%S").split('=')
 
         folder_path = self.path_to_videos_folder + '/' + dir_name
 
@@ -121,4 +121,6 @@ class PiGuardian:
 
         # waits for the first file to be created to proceed
         while not os.path.exists('dataset/' + profile_name + '/' + files[0][0]):
-            sleep(0.1)
+            sleep(0.2)
+
+        self.face_recognition_handler = FaceRecognitionHandler()
