@@ -27,17 +27,12 @@ class EmailHandler:
         msg = MIMEMultipart()
         msg['Subject'] = 'Automated Email'
         msg['From'] = self.email_address
-        msg['To'] = 'arthurcarbonari99@gmail.com'
+        msg['To'] = destination_address
 
         msg.attach(MIMEText("An unkown person was spotted at one of your protected locations", 'plain'))
 
-        # Load the image file
-        image_path = 'dataset/arthur_martins/pic1.jpg'
-        with open(image_path, 'rb') as image_file:
-            image_data = image_file.read()
-
         # Create an image attachment
-        image_attachment = MIMEImage(image_data)
+        image_attachment = MIMEImage(image)
         image_attachment.add_header('Content-Disposition', 'attachment', filename='image.jpg')
         msg.attach(image_attachment)
 
