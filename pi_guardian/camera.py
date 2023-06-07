@@ -60,7 +60,7 @@ class Camera:
 
         (self.w0, self.h0) = picam2.stream_configuration("main")["size"]
         (self.w1, self.h1) = picam2.stream_configuration("lores")["size"]
-        self.faces_locations = []
+        self.face_locations = []
 
         self.streaming_output = StreamingOutput()
         picam2.start_recording(JpegEncoder(), FileOutput(self.streaming_output))
@@ -87,7 +87,7 @@ class Camera:
     # this functon is used to drawn the square and name in the face, must be called after boxes and names initialization 
     def draw_faces(self, request):
         with MappedArray(request, "main") as m:
-            for f in self.faces_locations:
+            for f in self.face_locations:
                 (x, y, w, h) = [c * n // d for c, n, d in zip(f, (self.w0, self.h0) * 2, (self.w1, self.h1) * 2)]
                 cv2.rectangle(m.array, (x, y), (x + w, y + h), (0, 255, 0, 0))
 
